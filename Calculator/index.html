@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<head>
+<link rel="shortcut icon" href="favicon.png" /><!-- MoeMoe favicon-->
+<link rel="stylesheet" href="style/style.css">
+</head>
+
+<title>
+    Back Loaded Horn Calculator! For Newbee
+</title>
+
+
+
+<html>
+
+<div id = "TopPage">
+    <h1> Hello? This is Backloaded Horn Calculator</h1>
+
+    <h2>Disclaimer : This calculator may NOT CORRECT </h2>
+    <h2>  I'm amature.</h2>
+    <img id = "SPECimage" src = "images/SPECS.png">
+</div>
+
+<body>
+    <div id = "Ans"></div> <!--Temporary Answer Value AT END? PLEASE CHANGE TO TABLE!!!!-->
+
+    <div id = "table"></div>
+        <button onclick='console.log("Refreshing")'>Refresh?</button>
+
+        <div id = "dataInput">
+        <h3>Enter These Parameters And Click calculate! <br/></h3>
+        <form id = "parameterInput" onsubmit="return false;" method="post">
+            tableColor (mint): <input type = "color" id= "tableColor" value = "#3BF796"><br>
+            ThroatArea (mm^2 | m^2) : <input type = "number" id = "throatArea" size = 10 value = "800"><br>
+            flare constant (0~1) : <input type = "number" id = "flareConst" min = "0" max = "1" step = "0.01" value = "1"><br>
+            Cutoff Frequency (0~) : <input type = "number" id = "cutOffFreq" value ="60"><br>
+            is mm Scale? (NO.INCH.NO) : <input type = "checkbox" id = "ismm" checked><br>
+
+            Below is structual parameters.<br>
+            Total Spline Length (mm|m) : <input type = "number" id = "splineTotLength" value ="600"><br>
+            Total Segment Numbers (0~) : <input type = "number" id = "totalSegmentNum" value = "25"><br>
+            Width of Throat (mm | m) : <input type = "number" id = "throatWidth" value = "80"><br>
+            
+
+            <input type = "submit" value = "Calculateee!" onclick="updateParameter()">
+            <input type = "reset" value = "Initializeee!">
+        </form>
+        <!--Get Value from input with { document.getElementById("id").value } -->
+    </div>  
+    <div id = "ParametersTable">
+        <table border = "1"> <!-- Table For Calculating Functions. If you don't know Variables, Please View Images.  -->
+
+            <caption id = "capParametersTable">Inserted Parameters</caption>
+            <tr>
+                <th>ThroatArea</th>
+                <th>Flare Const.</th>
+                <th>Cutoff Freq.</th>
+                <th>is mm?</th>
+                <th>Spline Total Length</th>
+                <th>Total Segment</th>
+                <th>Width of Throat</th>
+
+            </tr>
+            
+            <tr id = "tdParametersTable">
+                <td id = "tdthroatArea"></td>
+                <td id = "tdflareConst"></td>
+                <td id = "tdcutOffFreq"></td>
+                <td id = "tdismm"></td>
+                <td id = "tdsplineTotLength"></td>
+                <td id = "tdtotalSegmentNum"></td>
+                <td id = "tdthroatWidth"></td>
+
+            </tr>
+        </table>
+    </div>
+
+    <table border = "1" id = "calculatedTable">
+        <caption id = "capCalculatedTable">Horn Parameter Generator - Beta</caption>
+        <tr>
+            <th>Segment</th>
+            <th>Length</th>
+            <th>Area</th>
+        </tr>
+        <div id = "insertTableParameter"></div>
+    </table>
+    <div contenteditable>Mikuchan Daikusi</div>
+</body>
+
+
+<!--
+<script src="https://unpkg.com/d3@3/d3.min.js"></script>
+<script src="https://unpkg.com/function-plot@1/dist/function-plot.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@latest/nerdamer.core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@latest/Algebra.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@latest/Calculus.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@latest/Solve.js"></script>
+-->
+<script src = "script/calc.js"></script>
+</html>
