@@ -41,37 +41,39 @@ function refreshTable(inputParamStruct){
 
     console.log(paramForCalculatingTable.segmentLength);//Debugging
 
-    let maxCalculateSegment = inputParamStruct.totalSegmentNum; // calculate Till reach Max Calculating Length.
-    let calculatedSegmentLength = inputParamStruct.segmentLength;
+    var maxCalculateSegment = inputParamStruct.totalSegmentNum; // calculate Till reach Max Calculating Length.
+    var calculatedSegmentLength = inputParamStruct.segmentLength;
 
     //set OutPut Datas.
-    let segmentNow;
-    let lengthNow;
-    let AreaNow;
-    let heightNow;
-    let parFCal = paramForCalculatingTable;
+    var segmentNow;
+    var lengthNow;
+    var AreaNow;
+    var heightNow;
+    var parFCal = paramForCalculatingTable;
 
 
         //START - Add Table Data Block 
-        let calcTableDataBody = document.getElementById("calcTable");
-        let calcTablerow = calcTableDataBody.insertRow(calcTableDataBody.rows.length);
+        var calcTableDataBody = document.getElementById("calculatedTable");
+        var calcTablerow = calcTableDataBody.insertRow(calcTableDataBody.rows.length);
 
-            //Add Cell info For Add Data
-            let segmentNow_0 = calcTablerow.insertCell(0);
-            let lengthNow_1 = calcTablerow.insertCell(1);
-            let AreaNow_2 = calcTablerow.insertCell(2);
-            let heightNow_3 = calcTablerow.insertCell(3);
+        //Add Cell info For Add Data
+        var segmentNow_0 = calcTablerow.insertCell(0);
+        var lengthNow_1 = calcTablerow.insertCell(1);
+        var AreaNow_2 = calcTablerow.insertCell(2);
+        var heightNow_3 = calcTablerow.insertCell(3);
+
+            for (let i = 0; i <= maxCalculateSegment; i++){
+                segmentNow = i;
+                lengthNow_1 = lengthNow = i * calculatedSegmentLength;
+                segmentNow_0.innerHTML = segmentNow; 
+
+                AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
+                AreaNow_2 = AreaNow;
+                heightNow_3 = AreaNow / parFCal.throatWidth;
+            }
 
 
-        for (let i = 0; i <= maxCalculateSegment; i++){
-            segmentNow = i;
-            lengthNow = i * calculatedSegmentLength;
-            segmentNow_0.innerHTML = segmentNow; 
-            AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
-        }
-
-
-        //END - Add Table Data Block
+            //END - Add Table Data Block
 
 
     //Reset OutPut Datas For Prevent Error.
