@@ -1,4 +1,3 @@
-
 var testResult = hornAreaCalculator(12000,56,1,29.0825,true);
 document.getElementById("Ans").innerHTML = testResult;
 
@@ -36,51 +35,87 @@ function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,struc
 
 
 function refreshTable(inputParamStruct){
+    var calcTableDataBody = document.getElementById("calculatedTable"); //this will help me much.
+    var parFCal = paramForCalculatingTable; //shorten Parameter prototype.
 
-    //ADD - removes Previous Tables.
+    //remove Previous Tables.... 
+        if (calcTableDataBody.rows.length != 1){ // check it is First run with Row Length..!
+            let removeTableNum = calcTableDataBody.rows.length - 1; //not So Beautifull.... Please Fix to 1 or 0!
+            for(let y = removeTableNum; y > 0 ; y--){
+                calcTableDataBody.deleteRow(1);
+                console.log("removing..." + y);
+            }
+    } //Remove PRevious Rows END!
 
-    console.log(paramForCalculatingTable.segmentLength);//Debugging
+    // console.log(paramForCalculatingTable.segmentLength);//Debugging
 
     var maxCalculateSegment = inputParamStruct.totalSegmentNum; // calculate Till reach Max Calculating Length.
     var calculatedSegmentLength = inputParamStruct.segmentLength;
 
     //set OutPut Datas.
+    /*
     var segmentNow;
     var lengthNow;
     var AreaNow;
     var heightNow;
-    var parFCal = paramForCalculatingTable;
+    */ // OUTDATED ID : 202008241022;
 
 
         //START - Add Table Data Block 
-        var calcTableDataBody = document.getElementById("calculatedTable");
-        var calcTablerow = calcTableDataBody.insertRow(calcTableDataBody.rows.length);
 
-        //Add Cell info For Add Data
+        // ADD Table Space For input Datas. 
+            
+            for (let k = 0; k <= maxCalculateSegment; k++){ // target Row Numbers: Segment Number + 1;
+                var insertCells = ""; // initialize insertCells For Preventing Errors.
+
+                for (let x = 0; x < calcTableDataBody.rows[0].cells.length;x++){
+                    // DEBUG console.log(insertCells + "ic " + x);
+                   
+                    let insertText;
+
+                    // if (x!=0){insertText = "\n"}; // generates unwanted "undefined" STRING... 
+                    (x!=0)?insertText = "\n": insertText = ""; 
+
+                    // DEBUG console.log(insertText + "it" + x);
+                    insertText = insertText + "<td></td>";
+                    insertCells = insertCells + insertText;
+                    //calcTableDataBody.insertCell(x); // insert cell as lengths
+                    
+                    // DEBUG console.log(x + "번째 for X 반복문");
+                }
+                calcTableDataBody.insertRow(k+1).innerHTML = insertCells; // create row as segment..
+
+            }
+        
+        
+        //Add Cell Variables For Add Data // OUTDATED
+        /*
+        var calcTablerow = calcTableDataBody.insertRow(calcTableDataBody.rows.length); // <-- this Will Shorten Codes.
         var segmentNow_0 = calcTablerow.insertCell(0);
         var lengthNow_1 = calcTablerow.insertCell(1);
         var AreaNow_2 = calcTablerow.insertCell(2);
         var heightNow_3 = calcTablerow.insertCell(3);
-
+        */ // OUTDATED ID : 202008241022 ... I CAN'T USE These Functions..OTL
+        
             for (let i = 0; i <= maxCalculateSegment; i++){
-                segmentNow = i;
-                lengthNow_1 = lengthNow = i * calculatedSegmentLength;
-                segmentNow_0.innerHTML = segmentNow; 
+                // Accessing Cell With tablename.rows[x].cells[x].innerHTML // REF: https://bbuljj.tistory.com/89
+                // calculated Table Id is : "calculatedTable". I skipped { document.getElementById("calculatedTable") } Parse...
+                let cellSegment = calculatedTable.rows[i+1].cells[0]; //access to Segment Cell --- 0
+                let cellLength =  calculatedTable.rows[i+1].cells[1]; //access to Length Cell --- 1
+                let cellArea = calculatedTable.rows[i+1].cells[2]; //access to Area Cell --- 2
+                let cellHeight = calculatedTable.rows[i+1].cells[3]; //access to Height Cell --- 3
+                
+                let AreaNow;
+//DEBUG                console.log("debug + " + calculatedTable.rows[i+1].cells[0]);
+                cellSegment.innerHTML = i;
+                cellLength.innerHTML = lengthNow = i * parFCal.segmentLength; // seems segementlength need +1..?
+                cellArea.innerHTML = AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
+                cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
 
-                AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
-                AreaNow_2 = AreaNow;
-                heightNow_3 = AreaNow / parFCal.throatWidth;
             }
 
 
             //END - Add Table Data Block
-
-
-    //Reset OutPut Datas For Prevent Error.
-    segmentNow = undefined;
-    lengthNow = undefined;
-    AreaNow = undefined;
-    heightNow = undefined;
 
 } // refreshTable End.
 

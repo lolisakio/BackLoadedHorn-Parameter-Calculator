@@ -28,10 +28,13 @@
     background-color: cornsilk;
 }
 
-#calculatedTable{
+#calculatedTableWrapper{
+    padding: 0px;
+    margin:0px;
+    
     position:absolute;
-    top:3%;
-    right:3%;
+    top:1%;
+    right:1%;
     width:25%;
     max-width:30%;
     height:auto;
@@ -41,3 +44,6 @@
         color:darkcyan;
         font-size: 50px;
     }
+    
+
+
