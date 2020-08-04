@@ -34,7 +34,7 @@ function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,struc
 }
 
 
-function refreshTable(inputParamStruct){
+function refreshTable(inputParamStruct){ // PLEASE ADD Comparing Function
     var calcTableDataBody = document.getElementById("calculatedTable"); //this will help me much.
     var parFCal = paramForCalculatingTable; //shorten Parameter prototype.
 
