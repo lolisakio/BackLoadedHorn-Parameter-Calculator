@@ -34,7 +34,10 @@ function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,struc
     this.segmentLength = structSplineTotLength / structTotalSegmentNum;
 }
 
+
 function refreshTable(inputParamStruct){
+
+    //ADD - removes Previous Tables.
 
     console.log(paramForCalculatingTable.segmentLength);//Debugging
 
@@ -48,19 +51,38 @@ function refreshTable(inputParamStruct){
     let heightNow;
     let parFCal = paramForCalculatingTable;
 
-    for (let i = 0; i <= maxCalculateSegment; i++){
-        segmentNow = i;
-        lengthNow = i * calculatedSegmentLength;
-        
-        AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
-        console.log("-------------------next--------------------")
-    }
+
+        //START - Add Table Data Block 
+        let calcTableDataBody = document.getElementById("calcTable");
+        let calcTablerow = calcTableDataBody.insertRow(calcTableDataBody.rows.length);
+
+            //Add Cell info For Add Data
+            let segmentNow_0 = calcTablerow.insertCell(0);
+            let lengthNow_1 = calcTablerow.insertCell(1);
+            let AreaNow_2 = calcTablerow.insertCell(2);
+            let heightNow_3 = calcTablerow.insertCell(3);
+
+
+        for (let i = 0; i <= maxCalculateSegment; i++){
+            segmentNow = i;
+            lengthNow = i * calculatedSegmentLength;
+            segmentNow_0.innerHTML = segmentNow; 
+            AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
+        }
+
+
+        //END - Add Table Data Block
+
+
     //Reset OutPut Datas For Prevent Error.
     segmentNow = undefined;
     lengthNow = undefined;
     AreaNow = undefined;
     heightNow = undefined;
-}
+
+} // refreshTable End.
+
+
 
 function hornAreaCalculator (throatArea,distFromStart,flareConst,cutoffFrequency,ismm2){
     let calculatedArea;
