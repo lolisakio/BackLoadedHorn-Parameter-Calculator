@@ -2,6 +2,7 @@
 var testResult = hornAreaCalculator(12000,56,1,29.0825,true);
 document.getElementById("Ans").innerHTML = testResult;
 
+var paramForCalculatingTable;
 
 function updateParameter(){
     console.log("Data Updated!");
@@ -13,9 +14,54 @@ function updateParameter(){
     let splineTotLength = tdsplineTotLength.innerHTML = document.getElementById("splineTotLength").value;
     let totalSegmentNum = tdtotalSegmentNum.innerHTML = document.getElementById("totalSegmentNum").value;
     let throatWidth = tdthroatWidth.innerHTML = document.getElementById("throatWidth").value;
-    let updateCalculate = hornAreaCalculator(throatArea,splineTotLength,flareConst,cutOffFreq,ismm);
+
+    paramForCalculatingTable = new paramstructure(throatArea,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
+    let updateCalculate = hornAreaCalculator(throatArea,splineTotLength,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
     document.getElementById("Ans").innerHTML = updateCalculate;
+    refreshTable(paramForCalculatingTable);
 }
+
+
+function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,structIsmm,structSplineTotLength,structTotalSegmentNum,strucThroatWidth){
+    this.throatArea = structThroatArea;
+    this.flareConst = structFlareConst;
+    this.cutOffFreq = structCutOffFreq;
+    this.ismm = structIsmm;
+    this.splineTotLength = structSplineTotLength;
+    this.totalSegmentNum = structTotalSegmentNum;
+    this.throatWidth = strucThroatWidth;
+
+    this.segmentLength = structSplineTotLength / structTotalSegmentNum;
+}
+
+function refreshTable(inputParamStruct){
+
+    console.log(paramForCalculatingTable.segmentLength);//Debugging
+
+    let maxCalculateSegment = inputParamStruct.totalSegmentNum; // calculate Till reach Max Calculating Length.
+    let calculatedSegmentLength = inputParamStruct.segmentLength;
+
+    //set OutPut Datas.
+    let segmentNow;
+    let lengthNow;
+    let AreaNow;
+    let heightNow;
+    let parFCal = paramForCalculatingTable;
+
+    for (let i = 0; i <= maxCalculateSegment; i++){
+        segmentNow = i;
+        lengthNow = i * calculatedSegmentLength;
+        
+        AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
+        console.log("-------------------next--------------------")
+    }
+    //Reset OutPut Datas For Prevent Error.
+    segmentNow = undefined;
+    lengthNow = undefined;
+    AreaNow = undefined;
+    heightNow = undefined;
+}
+
 function hornAreaCalculator (throatArea,distFromStart,flareConst,cutoffFrequency,ismm2){
     let calculatedArea;
     let S_t;
@@ -40,6 +86,7 @@ function hornAreaCalculator (throatArea,distFromStart,flareConst,cutoffFrequency
     let SOUNDSPEEDATAIR = 344; // m/s
     let x_0 = (SOUNDSPEEDATAIR / (2 * Math.PI * cutoffFrequency)); // calculaxting x_0 -> 
     calculatedArea = S_t*(Math.cosh(x/x_0) + flareConst * Math.sinh(x/x_0))**2; //from calculation
+    /* // debugging
     console.log(throatArea);
     console.log(distFromStart);
     console.log(S_t);
@@ -47,6 +94,7 @@ function hornAreaCalculator (throatArea,distFromStart,flareConst,cutoffFrequency
     console.log(x_0);
     console.log(x);
     console.log(calculatedArea);
+    */
     switch (ismm2){
         case true:{
             return calculatedArea*(10**6);
