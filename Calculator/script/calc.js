@@ -112,11 +112,7 @@ function refreshTable(inputParamStruct){ // PLEASE ADD Comparing Function
                 cellArea.innerHTML = AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
                 cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
 
-            }
-              //DEBUGGING..
-             let testval = $('#calculatedTable').rows[1].cells[1].innerText;
-             console.log("DEBUGGG : " + testval);
-            //END - Add Table Data Block
+            } //END - Add Table Data Block
 
 } // refreshTable End.
 
