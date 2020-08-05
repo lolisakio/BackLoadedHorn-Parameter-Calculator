@@ -164,8 +164,19 @@ function hornAreaCalculator (throatArea,distFromStart,flareConst,cutoffFrequency
     }
  
 }
-/*
-function tablegenerator(width,height){
 
+
+//These Are EVENTLISTNER
+
+generatorEventListner();
+function generatorEventListner(){
+$('#customSegmentLength').change(function(){ //Hide Numbers input Tab When customSegmentLength IS ON! 
+    if($(this).is(':checked')) {
+        console.log("removing!");
+        $("#totalSegmentNum").hide();
+    } else {
+        console.log("reveling!");
+        $("#totalSegmentNum").show();
+    }
+});
 }
-*/
