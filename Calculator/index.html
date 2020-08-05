@@ -54,6 +54,7 @@
         <!--Get Value from input with { document.getElementById("id").value } -->
     </div>  
     <div id = "ParametersTable">
+
         <table border = "1"> <!-- Table For Calculating Functions. If you don't know Variables, Please View Images.  -->
 
             <caption id = "capParametersTable">Inserted Parameters</caption>
@@ -81,11 +82,20 @@
         </table>
     </div>
     <div id = "calculatedTableWrapper">
+        <h2 id = "calcTableCaption">Horn Parameter Generator - Beta</h2>
+        <div id = "CalcTableGadget">
+            <button id = "calcTableAddRow">AddRow</button>
+            <button id = "calcTableRemoveRow">RemoveRow</button>
+            <button id = "calcTableRefresh">Refresh</button>
+        </div>
+        <br>
+        
     <table border = "1" id = "calculatedTable">
-        <caption id = "capCalculatedTable">Horn Parameter Generator - Beta</caption>
+        <caption id = "capCalculatedTable"></caption>
         <tr>
             <th>Segment</th>
-            <th>Length</th>
+            <th>LengthGap</th>
+            <th>LengthStack</th>
             <th>Area</th>
             <th>Height</th>
         </tr>

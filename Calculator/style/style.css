@@ -14,8 +14,7 @@
     height:auto;
 }
     #tdParametersTable{
-        color:lightseagreen;
-
+        color:lightseagre 
     }
     #capParametersTable{
         color:darkcyan;
@@ -29,20 +28,17 @@
 }
 
 #calculatedTableWrapper{
-    padding: 0px;
-    margin:0px;
-    
     position:absolute;
-    top:1%;
-    right:1%;
+    top:3%;
+    right:5%;
     width:25%;
     max-width:30%;
     height:auto;
 }
 
-    #capCalculatedTable{
+    #calcTableCaption{
         color:darkcyan;
-        font-size: 50px;
+        font-size: 35px;
     }
     
 
