@@ -1,10 +1,36 @@
 var testResult = hornAreaCalculator(12000,56,1,29.0825,true);
 $("#Ans").html(testResult); // insert Text With THIS!!!
 
+
+
+//These Are EVENTLISTNER
+$(document).ready(function(){
+generatorEventListner();
+});
+
+function generatorEventListner(){
+$('#customSegmentLength').change(function(){ //Hide Numbers input Tab When customSegmentLength IS ON! 
+    if($(this).is(':checked')) {
+        console.log("removing!");
+        $("#totSegWrapper").hide();
+    } else {
+        console.log("reveling!");
+        $("#totSegWrapper").show();
+    }
+});
+}
+
+
 var paramForCalculatingTable;
 
 function updateParameter(){
     console.log("Data Updated!");
+    assignParamsToVisualTable();
+    refreshCalculatedTable();
+}
+
+function assignParamsToVisualTable(){
+    
     let throatArea = tdthroatArea.innerHTML =  $("#throatArea").val();
     let flareConst = tdflareConst.innerHTML =  $("#flareConst").val();
     let cutOffFreq = tdcutOffFreq.innerHTML =  $("#cutOffFreq").val();
@@ -17,10 +43,25 @@ function updateParameter(){
     paramForCalculatingTable = new paramstructure(throatArea,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
     let updateCalculate = hornAreaCalculator(throatArea,splineTotLength,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
     $("#Ans").html(updateCalculate);
-    refreshTable(paramForCalculatingTable);
 }
+ function refreshCalculatedTable(){
+    let calculateTableSelector = $('#customSegmentLength').is(":checked");
+    switch (calculateTableSelector){
+        case true : {
+            refreshCustomegmentTable(paramForCalculatingTable);
+            console.log("Refreshing CUSTOM Segment Calcuator");
+        }
+        case false : {
+            refreshFixedSegmentTable(paramForCalculatingTable);
+            console.log("Refreshing FIXED Segment Calcuator");
+        }
+    }
 
+ }
 
+function refreshCustomegmentTable(){ // IN PROGRESS
+    console.log("NEED TO ADDDO");
+}
 function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,structIsmm,structSplineTotLength,structTotalSegmentNum,strucThroatWidth){
     this.throatArea = structThroatArea;
     this.flareConst = structFlareConst;
@@ -34,7 +75,7 @@ function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,struc
 }
 
 
-function refreshTable(inputParamStruct){ // PLEASE ADD Comparing Function
+function refreshFixedSegmentTable(inputParamStruct){ // PLEASE ADD Comparing Function
     var calcTableDataBody = document.getElementById("calculatedTable"); //this will help me much. <-- How Convert jQuery?
     var parFCal = paramForCalculatingTable; //shorten Parameter prototype.
 
@@ -163,17 +204,3 @@ function hornAreaCalculator (throatArea,distFromStart,flareConst,cutoffFrequency
 }
 
 
-//These Are EVENTLISTNER
-
-generatorEventListner();
-function generatorEventListner(){
-$('#customSegmentLength').change(function(){ //Hide Numbers input Tab When customSegmentLength IS ON! 
-    if($(this).is(':checked')) {
-        console.log("removing!");
-        $("#totalSegmentNum").hide();
-    } else {
-        console.log("reveling!");
-        $("#totalSegmentNum").show();
-    }
-});
-}
