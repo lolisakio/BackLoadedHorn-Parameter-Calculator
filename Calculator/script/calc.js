@@ -1,22 +1,22 @@
 var testResult = hornAreaCalculator(12000,56,1,29.0825,true);
-document.getElementById("Ans").innerHTML = testResult;
+$("#Ans").html(testResult); // insert Text With THIS!!!
 
 var paramForCalculatingTable;
 
 function updateParameter(){
     console.log("Data Updated!");
-    let throatArea = tdthroatArea.innerHTML =  document.getElementById("throatArea").value;
-    let flareConst = tdflareConst.innerHTML = document.getElementById("flareConst").value;
-    let cutOffFreq = tdcutOffFreq.innerHTML = document.getElementById("cutOffFreq").value;
-    let ismm = tdismm.innerHTML = document.getElementById("ismm").checked; // input type is "Checkbox" , so value is always "on" so use checked?(bool)
+    let throatArea = tdthroatArea.innerHTML =  $("#throatArea").val();
+    let flareConst = tdflareConst.innerHTML =  $("#flareConst").val();
+    let cutOffFreq = tdcutOffFreq.innerHTML =  $("#cutOffFreq").val();
+    let ismm = tdismm.innerHTML = $("#ismm").is(':checked'); // input type is "Checkbox" , so value is always "on" so use checked?(bool)
     
-    let splineTotLength = tdsplineTotLength.innerHTML = document.getElementById("splineTotLength").value;
-    let totalSegmentNum = tdtotalSegmentNum.innerHTML = document.getElementById("totalSegmentNum").value;
-    let throatWidth = tdthroatWidth.innerHTML = document.getElementById("throatWidth").value;
+    let splineTotLength = tdsplineTotLength.innerHTML = $("#splineTotLength").val();
+    let totalSegmentNum = tdtotalSegmentNum.innerHTML = $("#totalSegmentNum").val();
+    let throatWidth     = tdthroatWidth.innerHTML     = $("#throatWidth").val();
 
     paramForCalculatingTable = new paramstructure(throatArea,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
     let updateCalculate = hornAreaCalculator(throatArea,splineTotLength,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
-    document.getElementById("Ans").innerHTML = updateCalculate;
+    $("#Ans").html(updateCalculate);
     refreshTable(paramForCalculatingTable);
 }
 
@@ -35,7 +35,7 @@ function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,struc
 
 
 function refreshTable(inputParamStruct){ // PLEASE ADD Comparing Function
-    var calcTableDataBody = document.getElementById("calculatedTable"); //this will help me much.
+    var calcTableDataBody = document.getElementById("calculatedTable"); //this will help me much. <-- How Convert jQuery?
     var parFCal = paramForCalculatingTable; //shorten Parameter prototype.
 
     //remove Previous Tables.... 
@@ -43,7 +43,7 @@ function refreshTable(inputParamStruct){ // PLEASE ADD Comparing Function
             let removeTableNum = calcTableDataBody.rows.length - 1; //not So Beautifull.... Please Fix to 1 or 0!
             for(let y = removeTableNum; y > 0 ; y--){
                 calcTableDataBody.deleteRow(1);
-                console.log("removing..." + y);
+                //console.log("removing..." + y); //DEBUGGING
             }
     } //Remove PRevious Rows END!
 
@@ -113,8 +113,9 @@ function refreshTable(inputParamStruct){ // PLEASE ADD Comparing Function
                 cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
 
             }
-
-
+              //DEBUGGING..
+             let testval = $('#calculatedTable').rows[1].cells[1].innerText;
+             console.log("DEBUGGG : " + testval);
             //END - Add Table Data Block
 
 } // refreshTable End.
@@ -169,3 +170,5 @@ function tablegenerator(width,height){
 
 }
 */
+
+//ADD Function - 
