@@ -118,7 +118,16 @@ function refreshCustomSegmentTable(){ // IN PROGRESS
         $("#calculatedTable")[0].insertRow(currentTableLength-1);
         console.log("Adding Rows..");
             for(let i=0;i<cellLength;i++){
-                $("#calculatedTable")[0].rows[currentTableLength-1].insertCell(i);
+                switch (i) {
+                    case 1 : {
+                        $("#calculatedTable")[0].rows[currentTableLength-1].insertCell(i);
+                        $("#calculatedTable")[0].rows[currentTableLength-1].cells[i].contentEditable = "true";
+                        break;
+                    }
+                    default : {
+                        $("#calculatedTable")[0].rows[currentTableLength-1].insertCell(i);
+                    }
+                }
             }
         refreshCalcData(true);        
     });
@@ -149,6 +158,7 @@ function refreshCustomSegmentTable(){ // IN PROGRESS
 function refreshCalcData(CustomTableFlag){
         let LengthStack=0;
         let calcTableRowLength = parseInt($("#calculatedTable tr").length -2); // table row start From 0 (-1), remove head(-1) -> sum =  -2!
+        let parFCal = paramForCalculatingTable;
 
         for (let i = 0; i <= calcTableRowLength; i++){
             // Accessing Cell With tablename.rows[x].cells[x].innerHTML // REF: https://bbuljj.tistory.com/89
@@ -160,7 +170,6 @@ function refreshCalcData(CustomTableFlag){
             let cellHeight      = calcTableRowCellDOM(i+1,4); //access to Height Cell --- 3
             
             let AreaNow;
-            let parFCal = paramForCalculatingTable;
 //DEBUG                console.log("debug + " + calculatedTable.rows[i+1].cells[0]);
             switch (CustomTableFlag){
                     
@@ -172,31 +181,42 @@ function refreshCalcData(CustomTableFlag){
                     cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
                 break;
                 }
-                /*
+                
                 case true : { // YES Custom Table
+                    cellSegment.innerHTML = i;
+                    console.log("cellLengthGap   "+cellLengthGap.innerHTML);
+                    console.log("LengthStack    " + LengthStack);
                     switch (i){
-
                         case calcTableRowLength : {
                             break;
                         }
                         default : {
-
+                            LengthStack = LengthStack + parseInt(cellLengthGap.innerHTML);
+                            cellLengthStack.innerHTML = LengthStack;
+                            cellArea.innerHTML = AreaNow = hornAreaCalculator(parFCal.throatArea,LengthStack,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
+                            cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
+                            
                         }
-                        cellSegment.innerHTML = i;
-//                        cellLengthGap.innerHTML = parFCal.segmentLength;
-//                        cellLengthStack.innerHTML = lengthNow = i * parFCal.segmentLength; // seems segementlength need +1..?
-                        cellArea.innerHTML = AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
-                        cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
+                        
                     }
+
                     break;
                 }
-                case undefined : {
-
-                }
-                */
+                
 
         }
+        
+        
         } //END - Add Table Data Block
+
+        if ( CustomTableFlag && (parseInt(LengthStack) != parseInt(parFCal.splineTotLength)) ){
+            let diffrenceShit = parseInt(parFCal.splineTotLength) - parseInt(LengthStack);
+            alert("SomeThing Worng At LengthGap Parameter!!!! \n {Real - Yours} DIFFRENCE IS  : " +  diffrenceShit);
+            $("#lengthTotalERROR").html("SomeThing Worng At LengthGap Parameter!!!! <br/> {Real - Yours} DIFFRENCE IS  : " +  diffrenceShit);
+        }
+        else {
+            $("#lengthTotalERROR").html("SomeThing GrEAT At LengthGap Parameter!!!! <br/>  {Real - Yours} DIFFRENCE IS  : 0!");
+        }
 
         calcTableRowCellDOM(calcTableRowLength+1,1).innerHTML = "Fin";
         console.log("refreshing CUTSOM Data");
@@ -245,8 +265,11 @@ function initializeCustomTable(){
         $("#calculatedTable")[0].insertRow(i);
         for(let j = 0; j < $("#calculatedTable tr:eq(0) th").length; j++){
             $("#calculatedTable")[0].rows[i].insertCell(j);
+
         }
     }
+    $("#calculatedTable")[0].rows[1].cells[1].contentEditable = "true"; // This Will Allow All Table Edaitable
+    
     refreshCalcData(false);
 }// This Function Will Add initial Table For Custom Segment Length...?
 
