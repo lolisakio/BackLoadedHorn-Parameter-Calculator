@@ -33,21 +33,6 @@ function updateParameter(){
     refreshCalculatedTable();
 }
 
-function assignParamsToVisualTable(){
-    
-    let throatArea = tdthroatArea.innerHTML =  $("#throatArea").val();
-    let flareConst = tdflareConst.innerHTML =  $("#flareConst").val();
-    let cutOffFreq = tdcutOffFreq.innerHTML =  $("#cutOffFreq").val();
-    let ismm = tdismm.innerHTML = $("#ismm").is(':checked'); // input type is "Checkbox" , so value is always "on" so use checked?(bool)
-    
-    let splineTotLength = tdsplineTotLength.innerHTML = $("#splineTotLength").val();
-    let totalSegmentNum = tdtotalSegmentNum.innerHTML = $("#totalSegmentNum").val();
-    let throatWidth     = tdthroatWidth.innerHTML     = $("#throatWidth").val();
-
-    paramForCalculatingTable = new paramstructure(throatArea,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
-    let updateCalculate = hornAreaCalculator(throatArea,splineTotLength,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
-    $("#Ans").html(updateCalculate);
-}
  function refreshCalculatedTable(){
     removePreviousCell();
     let calculateTableSelector = $('#customSegmentLength').is(":checked");
@@ -67,6 +52,23 @@ function assignParamsToVisualTable(){
     }
 
  }
+ 
+function assignParamsToVisualTable(){
+    
+    let throatArea = tdthroatArea.innerHTML =  $("#throatArea").val();
+    let flareConst = tdflareConst.innerHTML =  $("#flareConst").val();
+    let cutOffFreq = tdcutOffFreq.innerHTML =  $("#cutOffFreq").val();
+    let ismm = tdismm.innerHTML = $("#ismm").is(':checked'); // input type is "Checkbox" , so value is always "on" so use checked?(bool)
+    
+    let splineTotLength = tdsplineTotLength.innerHTML = $("#splineTotLength").val();
+    let totalSegmentNum = tdtotalSegmentNum.innerHTML = $("#totalSegmentNum").val();
+    let throatWidth     = tdthroatWidth.innerHTML     = $("#throatWidth").val();
+
+    paramForCalculatingTable = new paramstructure(throatArea,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
+    let updateCalculate = hornAreaCalculator(throatArea,splineTotLength,flareConst,cutOffFreq,ismm,splineTotLength,totalSegmentNum,throatWidth);
+    $("#Ans").html(updateCalculate);
+}
+
 
 function removePreviousCell(){ 
     var calcTableDataBody = document.getElementById("calculatedTable"); //this will help me much. <-- How Convert jQuery?
@@ -82,6 +84,22 @@ function removePreviousCell(){
 
 }// removePreviousCell END
 
+function refreshFixedSegmentTable(inputParamStruct){ // PLEASE ADD Comparing Function
+    //    var calcTableDataBody = document.getElementById("calculatedTable"); //this will help me much. <-- How Convert jQuery?
+    //    = $("#calculatedTable")[0] 
+    
+        let maxCalculateSegment = parseInt(inputParamStruct.totalSegmentNum) + 1; // Add Till reach Max Calculating Length.
+            // ADD Table Space For input Datas. 
+                for (let k = 1; k <= maxCalculateSegment; k++){ // target Row Numbers: Segment Number + 1;
+                    $("#calculatedTable")[0].insertRow(k);
+                    for (let l = 0; l < $("#calculatedTable tr th").length; l++){
+                        $("#calculatedTable")[0].rows[k].insertCell(l);
+                        console.log("addingcell to row: " + k +" cell : " + l);
+                    }
+                }
+                refreshCalcData(false);
+    } // refreshTable End.
+    
 function refreshCustomSegmentTable(){ // IN PROGRESS
     /**
      * Progress : 
@@ -96,17 +114,13 @@ function refreshCustomSegmentTable(){ // IN PROGRESS
         initializeCustomTable();
 
     $("#calcTableAddRow").click(function(){
-        
+        let currentTableLength =  $("#calculatedTable tr").length;
+        $("#calculatedTable")[0].insertRow(currentTableLength-1);
         console.log("Adding Rows..");
-        let addRowText = "<tr>";
             for(let i=0;i<cellLength;i++){
-                addRowText = addRowText + "\n<td></td>";
+                $("#calculatedTable")[0].rows[currentTableLength-1].insertCell(i);
             }
-        addRowText = addRowText + "<\n/tr>";
-        
-        RefreshCustomCalcData();
-        $("#calculatedTable tr:eq(1)").after(addRowText);
-        
+        refreshCalcData(true);        
     });
 
     $("#calcTableRemoveRow").click(function(){
@@ -118,7 +132,7 @@ function refreshCustomSegmentTable(){ // IN PROGRESS
         else {
             console.log("Stoppp Pressing Delete Rows =U=");
         }
-        
+        refreshCalcData(true);
     });
 
         function getCalcRows(){
@@ -126,141 +140,69 @@ function refreshCustomSegmentTable(){ // IN PROGRESS
         }
 
     $("#calcTableRefresh").click(function(){
-        RefreshCustomCalcData();
+        refreshCalcData(true);
     });
 
     console.log("NEED TO ADDDO");
-
-
-    function RefreshCustomCalcData(){
-
-        console.log("refreshing CUTSOM Data");
-    };
-
 }
 
+function refreshCalcData(CustomTableFlag){
+        let LengthStack=0;
+        let calcTableRowLength = parseInt($("#calculatedTable tr").length -2); // table row start From 0 (-1), remove head(-1) -> sum =  -2!
 
-
-
-
-/* //ADDING function!!!
-function refreshDataOfCalcTable(flagCustom){
-    for (let i = 0; i <= maxCalculateSegment; i++){
-        // Accessing Cell With tablename.rows[x].cells[x].innerHTML // REF: https://bbuljj.tistory.com/89
-        // calculated Table Id is : "calculatedTable". I skipped { document.getElementById("calculatedTable") } Parse...
-        let cellSegment     = calculatedTable.rows[i+1].cells[0]; //access to Segment Cell --- 0
-        let cellLengthGap   = calculatedTable.rows[i+1].cells[1];
-        let cellLengthStack = calculatedTable.rows[i+1].cells[2]; //access to Length Cell --- 1
-        let cellArea        = calculatedTable.rows[i+1].cells[3]; //access to Area Cell --- 2
-        let cellHeight      = calculatedTable.rows[i+1].cells[4]; //access to Height Cell --- 3
-        
-        let AreaNow;
-//DEBUG                console.log("debug + " + calculatedTable.rows[i+1].cells[0]);
-        cellSegment.innerHTML = i;
-        cellLengthGap.innerHTML = parFCal.segmentLength;
-        cellLengthStack.innerHTML = lengthNow = i * parFCal.segmentLength; // seems segementlength need +1..?
-        cellArea.innerHTML = AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
-        cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
-
-    } //END - Add Table Data Block
-
-}
- */
-
-
-
-
-
-function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,structIsmm,structSplineTotLength,structTotalSegmentNum,strucThroatWidth){
-    this.throatArea = structThroatArea;
-    this.flareConst = structFlareConst;
-    this.cutOffFreq = structCutOffFreq;
-    this.ismm = structIsmm;
-    this.splineTotLength = structSplineTotLength;
-    this.totalSegmentNum = structTotalSegmentNum;
-    this.throatWidth = strucThroatWidth;
-
-    this.segmentLength = structSplineTotLength / structTotalSegmentNum;
-}
-
-
-function refreshFixedSegmentTable(inputParamStruct){ // PLEASE ADD Comparing Function
-    var calcTableDataBody = document.getElementById("calculatedTable"); //this will help me much. <-- How Convert jQuery?
-    var parFCal = paramForCalculatingTable; //shorten Parameter prototype.
-
-
-    // console.log(paramForCalculatingTable.segmentLength);//Debugging
-
-    var maxCalculateSegment = inputParamStruct.totalSegmentNum; // calculate Till reach Max Calculating Length.
-    var calculatedSegmentLength = inputParamStruct.segmentLength;
-
-    //set OutPut Datas.
-    /*
-    var segmentNow;
-    var lengthNow;
-    var AreaNow;
-    var heightNow;
-    */ // OUTDATED ID : 202008241022;
-
-
-        //START - Add Table Data Block 
-
-        // ADD Table Space For input Datas. 
+        for (let i = 0; i <= calcTableRowLength; i++){
+            // Accessing Cell With tablename.rows[x].cells[x].innerHTML // REF: https://bbuljj.tistory.com/89
+            // calculated Table Id is : "calculatedTable". I skipped { document.getElementById("calculatedTable") } Parse...
+            let cellSegment     = calcTableRowCellDOM(i+1,0); //access to Segment Cell --- 0
+            let cellLengthGap   = calcTableRowCellDOM(i+1,1); //Segment Gap
+            let cellLengthStack = calcTableRowCellDOM(i+1,2); //access to Length Cell --- 1
+            let cellArea        = calcTableRowCellDOM(i+1,3); //access to Area Cell --- 2
+            let cellHeight      = calcTableRowCellDOM(i+1,4); //access to Height Cell --- 3
             
-            for (let k = 0; k <= maxCalculateSegment; k++){ // target Row Numbers: Segment Number + 1;
-                var insertCells = ""; // initialize insertCells For Preventing Errors.
-
-                for (let x = 0; x < calcTableDataBody.rows[0].cells.length;x++){
-                    // DEBUG console.log(insertCells + "ic " + x);
-                   
-                    let insertText;
-
-                    // if (x!=0){insertText = "\n"}; // generates unwanted "undefined" STRING... 
-                    (x!=0)?insertText = "\n": insertText = ""; 
-
-                    // DEBUG console.log(insertText + "it" + x);
-                    insertText = insertText + "<td></td>";
-                    insertCells = insertCells + insertText;
-                    //calcTableDataBody.insertCell(x); // insert cell as lengths
-                    
-                    // DEBUG console.log(x + "번째 for X 반복문");
-                }
-                calcTableDataBody.insertRow(k+1).innerHTML = insertCells; // create row as segment..
-
-            }
-        
-        
-        //Add Cell Variables For Add Data // OUTDATED
-        /*
-        var calcTablerow = calcTableDataBody.insertRow(calcTableDataBody.rows.length); // <-- this Will Shorten Codes.
-        var segmentNow_0 = calcTablerow.insertCell(0);
-        var lengthNow_1 = calcTablerow.insertCell(1);
-        var AreaNow_2 = calcTablerow.insertCell(2);
-        var heightNow_3 = calcTablerow.insertCell(3);
-        */ // OUTDATED ID : 202008241022 ... I CAN'T USE These Functions..OTL
-        
-            for (let i = 0; i <= maxCalculateSegment; i++){
-                // Accessing Cell With tablename.rows[x].cells[x].innerHTML // REF: https://bbuljj.tistory.com/89
-                // calculated Table Id is : "calculatedTable". I skipped { document.getElementById("calculatedTable") } Parse...
-                let cellSegment     = calculatedTable.rows[i+1].cells[0]; //access to Segment Cell --- 0
-                let cellLengthGap   = calculatedTable.rows[i+1].cells[1];
-                let cellLengthStack = calculatedTable.rows[i+1].cells[2]; //access to Length Cell --- 1
-                let cellArea        = calculatedTable.rows[i+1].cells[3]; //access to Area Cell --- 2
-                let cellHeight      = calculatedTable.rows[i+1].cells[4]; //access to Height Cell --- 3
-                
-                let AreaNow;
+            let AreaNow;
+            let parFCal = paramForCalculatingTable;
 //DEBUG                console.log("debug + " + calculatedTable.rows[i+1].cells[0]);
-                cellSegment.innerHTML = i;
-                cellLengthGap.innerHTML = parFCal.segmentLength;
-                cellLengthStack.innerHTML = lengthNow = i * parFCal.segmentLength; // seems segementlength need +1..?
-                cellArea.innerHTML = AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
-                cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
+            switch (CustomTableFlag){
+                    
+                case false : { //NO Custom Table!
+                    cellSegment.innerHTML = i;
+                    cellLengthGap.innerHTML = parFCal.splineTotLength / calcTableRowLength;
+                    cellLengthStack.innerHTML = lengthNow = i * (parFCal.splineTotLength / calcTableRowLength); // seems segementlength need +1..?
+                    cellArea.innerHTML = AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
+                    cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
+                break;
+                }
+                /*
+                case true : { // YES Custom Table
+                    switch (i){
 
-            } //END - Add Table Data Block
+                        case calcTableRowLength : {
+                            break;
+                        }
+                        default : {
 
-} // refreshTable End.
+                        }
+                        cellSegment.innerHTML = i;
+//                        cellLengthGap.innerHTML = parFCal.segmentLength;
+//                        cellLengthStack.innerHTML = lengthNow = i * parFCal.segmentLength; // seems segementlength need +1..?
+                        cellArea.innerHTML = AreaNow = hornAreaCalculator(parFCal.throatArea,lengthNow,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
+                        cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
+                    }
+                    break;
+                }
+                case undefined : {
+
+                }
+                */
+
+        }
+        } //END - Add Table Data Block
+
+        calcTableRowCellDOM(calcTableRowLength+1,1).innerHTML = "Fin";
+        console.log("refreshing CUTSOM Data");
 
 
+    };
 
 function hornAreaCalculator (throatArea,distFromStart,flareConst,cutoffFrequency,ismm2){
     let calculatedArea;
@@ -286,15 +228,7 @@ function hornAreaCalculator (throatArea,distFromStart,flareConst,cutoffFrequency
     let SOUNDSPEEDATAIR = 344; // m/s
     let x_0 = (SOUNDSPEEDATAIR / (2 * Math.PI * cutoffFrequency)); // calculaxting x_0 -> 
     calculatedArea = S_t*(Math.cosh(x/x_0) + flareConst * Math.sinh(x/x_0))**2; //from calculation
-    /* // debugging
-    console.log(throatArea);
-    console.log(distFromStart);
-    console.log(S_t);
-   console.log(x);
-    console.log(x_0);
-    console.log(x);
-    console.log(calculatedArea);
-    */
+    
     switch (ismm2){
         case true:{
             return calculatedArea*(10**6);
@@ -307,43 +241,30 @@ function hornAreaCalculator (throatArea,distFromStart,flareConst,cutoffFrequency
 }
 
 function initializeCustomTable(){
-    let cellLength = $("#calculatedTable tr:eq(0) th").length;
-    let addrows = 2; // setADrowNumbers.
-
-    for (let i = 0; i <addrows; i++){ //readabillity is low.... Please fix!
-        let insertCell;
-        (i!=0)? insertCell = "": insertCell = insertCell + "\n";
-        insertCell = insertCell + "<tr>"; // add "row"
-
-        for (let j = 0; j < cellLength; j++){
-            let insertCellInside;
-            let segmentTotalSum = paramForCalculatingTable.splineTotLength;
-
-            switch (j){
-                case 0 : {
-                    insertCellInside = $("#calculatedTable tr").length - 1;
-                    break;
-                }
-                case 1 : {
-                    insertCellInside = segmentTotalSum * ($("#calculatedTable tr").length - 1);
-                    break;
-                }
-                case 2 : {
-                    insertCellInside = segmentTotalSum * ($("#calculatedTable tr").length - 1);
-                    break;
-                }
-                default :{
-                    insertCellInside = "";
-                }
-            }// Switch pharse For ADDING INITIAL DATA to CELLs
-
-            insertCell = insertCell + "<td>" + insertCellInside + "</td>";
-        }// for pharse for ADDING CELLS (td) 
-
-        insertCell = insertCell + "\n</tr>"; // add Escapement
-        $("#calculatedTable tr:eq(" + i + ")").after(insertCell);
-    } //for pharse for ADDING ROWS (tr) / number => see addrows variables.
+    for (let i = 1;i <=2;i++){
+        $("#calculatedTable")[0].insertRow(i);
+        for(let j = 0; j < $("#calculatedTable tr:eq(0) th").length; j++){
+            $("#calculatedTable")[0].rows[i].insertCell(j);
+        }
+    }
+    refreshCalcData(false);
 }// This Function Will Add initial Table For Custom Segment Length...?
 
+function calcTableRowCellDOM(rows,cells){ //for Simplifying Codes..?
+    let rowsnum = rows*1;
+    let cellsnum = cells*1;
+    return $("#calculatedTable")[0].rows[rowsnum].cells[cellsnum];
+}
 
+function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,structIsmm,structSplineTotLength,structTotalSegmentNum,strucThroatWidth){
+    this.throatArea = structThroatArea;
+    this.flareConst = structFlareConst;
+    this.cutOffFreq = structCutOffFreq;
+    this.ismm = structIsmm;
+    this.splineTotLength = structSplineTotLength;
+    this.totalSegmentNum = structTotalSegmentNum;
+    this.throatWidth = strucThroatWidth;
+
+    this.segmentLength = structSplineTotLength / structTotalSegmentNum;
+}
 
