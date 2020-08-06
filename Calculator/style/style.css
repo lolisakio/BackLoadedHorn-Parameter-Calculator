@@ -3,15 +3,25 @@
     max-width:80%;
     height:auto;
 }
+#leftBodyWrapper{
+    background-color:rgba(255,255,255,.5);
+    background-size:contain;
+    max-width:50%;
+
+}
 
 #SPECimage{
     max-width:80%;
     height:auto;
+    background-color:rgba(255,255,255,.5);
+    background-size:contain;
+
 }
 #ParametersTable{
     color:lightcoral;
     max-width:80%;
     height:auto;
+    
 }
     #tdParametersTable{
         color:lightseagre 
@@ -22,24 +32,22 @@
     }
 
 #dataInput{
-    border-width: thin;
     border: cadetblue;
     background-color: cornsilk;
+    background-size:contain;
+
 }
 
 #calculatedTableWrapper{
     position:absolute;
     top:3%;
-    right:10%;
+    right:15%;
     width:25%;
     max-width:30%;
     height:auto;
+    background-color:rgba(255,255,255,.5);
+    background-size: auto auto;
 }
-
-    #calcTableCaption{
-        color:darkcyan;
-        font-size: 35px;
-    }
 
 #BG{
     position:absolute;
@@ -61,13 +69,15 @@
     width:100%;
     height:100%;
     background-color:white;
-    opacity:95%;
+    opacity:65%;
 }
 #lengthTotalERROR{
     color:palevioletred;
     font-size:15px;
 }
    
-    
+.selected {
+    color: rgb(229,86,120);
+}
 
 

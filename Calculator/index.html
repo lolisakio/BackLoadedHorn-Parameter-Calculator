@@ -28,60 +28,61 @@
     <div id = "BG"></div>
     <div id = "BG-White"></div>
     <div id = "Ans"></div> <!--Temporary Answer Value AT END? PLEASE CHANGE TO TABLE!!!!-->
+    <div id = "leftBodyWrapper">
+        <div id = "table"></div>
+            <button onclick='console.log("Refreshing")'>Refresh?</button>
 
-    <div id = "table"></div>
-        <button onclick='console.log("Refreshing")'>Refresh?</button>
+            <div id = "dataInput">
+            <h3>Enter These Parameters And Click calculate! <br/></h3>
+            <form id = "parameterInput" onsubmit="return false;" method="post">
+                tableColor : <input type = "color" id= "tableColor" value = "#3BF796"> (mint)<br>
+                ThroatArea : <input type = "number" id = "throatArea" size = 10 value = "800"> (mm^2 | m^2)<br>
+                flare constant : <input type = "number" id = "flareConst" min = "0" max = "1" step = "0.01" value = "1"> (0~1)<br>
+                Cutoff Frequency : <input type = "number" id = "cutOffFreq" value ="60"> (0~)<br>
+                is mm Scale? : <input type = "checkbox" id = "ismm" checked> (NO.INCH.NO)<br>
 
-        <div id = "dataInput">
-        <h3>Enter These Parameters And Click calculate! <br/></h3>
-        <form id = "parameterInput" onsubmit="return false;" method="post">
-            tableColor : <input type = "color" id= "tableColor" value = "#3BF796"> (mint)<br>
-            ThroatArea : <input type = "number" id = "throatArea" size = 10 value = "800"> (mm^2 | m^2)<br>
-            flare constant : <input type = "number" id = "flareConst" min = "0" max = "1" step = "0.01" value = "1"> (0~1)<br>
-            Cutoff Frequency : <input type = "number" id = "cutOffFreq" value ="60"> (0~)<br>
-            is mm Scale? : <input type = "checkbox" id = "ismm" checked> (NO.INCH.NO)<br>
+                Below is structual parameters.<br>
+                Use Custom Segment Length? : <input type = "checkbox" id = "customSegmentLength" unchecked><br>
+                Total Spline Length : <input type = "number" id = "splineTotLength" value ="600"> (mm|m)<br>
+                <div id = "totSegWrapper">
+                Total Segment Numbers : <input type = "number" id = "totalSegmentNum" value = "25"> (0~)<br>
+                </div>
+                Width of Throat : <input type = "number" id = "throatWidth" value = "80"> (mm | m)<br>
+                
 
-            Below is structual parameters.<br>
-            Use Custom Segment Length? : <input type = "checkbox" id = "customSegmentLength" unchecked><br>
-            Total Spline Length : <input type = "number" id = "splineTotLength" value ="600"> (mm|m)<br>
-            <div id = "totSegWrapper">
-            Total Segment Numbers : <input type = "number" id = "totalSegmentNum" value = "25"> (0~)<br>
-            </div>
-            Width of Throat : <input type = "number" id = "throatWidth" value = "80"> (mm | m)<br>
-            
+                <input type = "submit" value = "Calculateee!" onclick="updateParameter()">
+                <input type = "reset" value = "Initializeee!">
+            </form>
+            <!--Get Value from input with { document.getElementById("id").value } -->
+        </div>  
+        <div id = "ParametersTable">
 
-            <input type = "submit" value = "Calculateee!" onclick="updateParameter()">
-            <input type = "reset" value = "Initializeee!">
-        </form>
-        <!--Get Value from input with { document.getElementById("id").value } -->
-    </div>  
-    <div id = "ParametersTable">
+            <table border = "1"> <!-- Table For Calculating Functions. If you don't know Variables, Please View Images.  -->
 
-        <table border = "1"> <!-- Table For Calculating Functions. If you don't know Variables, Please View Images.  -->
+                <caption id = "capParametersTable">Inserted Parameters</caption>
+                <tr>
+                    <th>ThroatArea</th>
+                    <th>Flare Const.</th>
+                    <th>Cutoff Freq.</th>
+                    <th>is mm?</th>
+                    <th>Spline Total Length</th>
+                    <th>Total Segment</th>
+                    <th>Width of Throat</th>
 
-            <caption id = "capParametersTable">Inserted Parameters</caption>
-            <tr>
-                <th>ThroatArea</th>
-                <th>Flare Const.</th>
-                <th>Cutoff Freq.</th>
-                <th>is mm?</th>
-                <th>Spline Total Length</th>
-                <th>Total Segment</th>
-                <th>Width of Throat</th>
+                </tr>
+                
+                <tr id = "tdParametersTable">
+                    <td id = "tdthroatArea"></td>
+                    <td id = "tdflareConst"></td>
+                    <td id = "tdcutOffFreq"></td>
+                    <td id = "tdismm"></td>
+                    <td id = "tdsplineTotLength"></td>
+                    <td id = "tdtotalSegmentNum"></td>
+                    <td id = "tdthroatWidth"></td>
 
-            </tr>
-            
-            <tr id = "tdParametersTable">
-                <td id = "tdthroatArea"></td>
-                <td id = "tdflareConst"></td>
-                <td id = "tdcutOffFreq"></td>
-                <td id = "tdismm"></td>
-                <td id = "tdsplineTotLength"></td>
-                <td id = "tdtotalSegmentNum"></td>
-                <td id = "tdthroatWidth"></td>
-
-            </tr>
-        </table>
+                </tr>
+            </table>
+        </div>
     </div>
     <div id = "calculatedTableWrapper">
         <h2 id = "calcTableCaption">Horn Parameter Generator - Beta</h2>
@@ -94,14 +95,16 @@
         
     <table border = "1" id = "calculatedTable">
         <caption id = "capCalculatedTable"></caption>
-        <tr>
-            <th>Segment</th>
-            <th>LengthGap</th>
-            <th>LengthStack</th>
-            <th>Area</th>
-            <th>Height</th>
-        </tr>
+        <tbody>
+            <tr>
+                <th>Segment</th>
+                <th>LengthGap</th>
+                <th>LengthStack</th>
+                <th>Area</th>
+                <th>Height</th>
+            </tr>
         <!--Below Comes Calculated Datas... Please Check? -->
+    </tbody>
     </table>
     <div id = "lengthTotalERROR"></div>
     </div>

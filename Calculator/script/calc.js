@@ -1,3 +1,4 @@
+'use strict'
 var testResult = hornAreaCalculator(12000,56,1,29.0825,true);
 $("#Ans").html(testResult); // insert Text With THIS!!!
 /**
@@ -26,8 +27,13 @@ $('#customSegmentLength').change(function(){ //Hide Numbers input Tab When custo
 
 
 var paramForCalculatingTable;
+var ArrowEnabled = false;
 
 function updateParameter(){
+    if (!ArrowEnabled){
+        ArrowEnabled = true;
+    }//check?
+    
     console.log("Data Updated!");
     assignParamsToVisualTable();
     refreshCalculatedTable();
@@ -94,7 +100,7 @@ function refreshFixedSegmentTable(inputParamStruct){ // PLEASE ADD Comparing Fun
                     $("#calculatedTable")[0].insertRow(k);
                     for (let l = 0; l < $("#calculatedTable tr th").length; l++){
                         $("#calculatedTable")[0].rows[k].insertCell(l);
-                        console.log("addingcell to row: " + k +" cell : " + l);
+                        //console.log("addingcell to row: " + k +" cell : " + l); //DEBUGGING
                     }
                 }
                 refreshCalcData(false);
@@ -150,6 +156,7 @@ function refreshCustomSegmentTable(){ // IN PROGRESS
 
     $("#calcTableRefresh").click(function(){
         refreshCalcData(true,true);
+        highlight_row();
     });
 
     console.log("NEED TO ADDDO");
@@ -174,6 +181,7 @@ function refreshCalcData(CustomTableFlag,checkSanity){
             switch (CustomTableFlag){
                     
                 case false : { //NO Custom Table!
+                    let lengthNow;
                     cellSegment.innerHTML = i;
                     cellLengthGap.innerHTML = parFCal.splineTotLength / calcTableRowLength;
                     cellLengthStack.innerHTML = lengthNow = i * (parFCal.splineTotLength / calcTableRowLength); // seems segementlength need +1..?
@@ -290,4 +298,72 @@ function paramstructure(structThroatArea,structFlareConst,structCutOffFreq,struc
 
     this.segmentLength = structSplineTotLength / structTotalSegmentNum;
 }
+/**
+ * Testing CopyTo ClipBoard 
+ *  REF : https://www.golangprograms.com/highlight-and-get-the-details-of-table-row-on-click-using-javascript.html
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+// Trigger // highlight_row();
 
+function highlight_row() {
+    console.log("HighLighter Enabled!");
+
+    var table = document.getElementById('calculatedTable');
+    var cells = table.getElementsByTagName('td');
+
+    for (var i = 0; i < cells.length; i++) {
+        console.log("HighLighter CLICKEDDDDD!!!!");
+
+        // Take each cell
+        var cell = cells[i];
+        // do something on onclick event for cell
+        cell.onclick = function () {
+            console.log("HighLighter CLICKEDDDDD!!!!");
+
+            // Get the row id where the cell exists
+            var rowId = this.parentNode.rowIndex;
+
+            var rowsNotSelected = table.getElementsByTagName('tr');
+            for (var row = 0; row < rowsNotSelected.length; row++) {
+                rowsNotSelected[row].style.backgroundColor = "";
+                rowsNotSelected[row].classList.remove('selected');
+            }
+            var rowSelected = table.getElementsByTagName('tr')[rowId];
+            rowSelected.style.backgroundColor = "rgb(195,255,143)";
+            rowSelected.className += " selected";
+
+            //msg = 'The ID of the company is: ' + rowSelected.cells[0].innerHTML;
+            //msg += '\nThe cell value is: ' + this.innerHTML;
+            //alert(msg);
+            alert("Clicked Row's Cell is : " +  rowSelected.cells[4].innerHTML);
+            /**
+             * Here Comes ""COPY"" Command... It may work....at this time!
+             * 
+             * 
+             */
+            /*
+            $("#TextDummy").text(rowSelected.cells[4].innerHTML);
+            let copyText = $("#TextDummy")[0];
+            copyText.select();
+            document.execCommand("copy");
+            alert("복사된 문자열: " + copyText.value);
+            */
+            let copyText = rowSelected.cells[4].innerHTML;
+            copy(copyText);
+        }
+    }
+
+}
+
+function copy(val) {
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = val;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+  }
