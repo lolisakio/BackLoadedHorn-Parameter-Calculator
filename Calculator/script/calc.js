@@ -149,13 +149,13 @@ function refreshCustomSegmentTable(){ // IN PROGRESS
         }
 
     $("#calcTableRefresh").click(function(){
-        refreshCalcData(true);
+        refreshCalcData(true,true);
     });
 
     console.log("NEED TO ADDDO");
 }
 
-function refreshCalcData(CustomTableFlag){
+function refreshCalcData(CustomTableFlag,checkSanity){
         let LengthStack=0;
         let calcTableRowLength = parseInt($("#calculatedTable tr").length -2); // table row start From 0 (-1), remove head(-1) -> sum =  -2!
         let parFCal = paramForCalculatingTable;
@@ -191,8 +191,8 @@ function refreshCalcData(CustomTableFlag){
                             break;
                         }
                         default : {
-                            LengthStack = LengthStack + parseInt(cellLengthGap.innerHTML);
                             cellLengthStack.innerHTML = LengthStack;
+                            LengthStack = LengthStack + parseInt(cellLengthGap.innerHTML);
                             cellArea.innerHTML = AreaNow = hornAreaCalculator(parFCal.throatArea,LengthStack,parFCal.flareConst,parFCal.cutOffFreq,parFCal.ismm);
                             cellHeight.innerHTML = AreaNow / parFCal.throatWidth;
                             
@@ -209,7 +209,7 @@ function refreshCalcData(CustomTableFlag){
         
         } //END - Add Table Data Block
 
-        if ( CustomTableFlag && (parseInt(LengthStack) != parseInt(parFCal.splineTotLength)) ){
+        if ( checkSanity && CustomTableFlag && (parseInt(LengthStack) != parseInt(parFCal.splineTotLength)) ){
             let diffrenceShit = parseInt(parFCal.splineTotLength) - parseInt(LengthStack);
             alert("SomeThing Worng At LengthGap Parameter!!!! \n {Real - Yours} DIFFRENCE IS  : " +  diffrenceShit);
             $("#lengthTotalERROR").html("SomeThing Worng At LengthGap Parameter!!!! <br/> {Real - Yours} DIFFRENCE IS  : " +  diffrenceShit);
